@@ -1,14 +1,15 @@
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
       doom-font (font-spec :family "JetBrains Mono" :size 15)
-      ;; doom-font (font-spec :family "APL385 Unicode" :size 15)
       doom-theme 'doom-vibrant
-      doom-modeline-major-mode-icon t
-      doom-modeline-major-mode-color-icon t
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
 
+;; Modeline
+(setq doom-modeline-major-mode-icon t
+      doom-modeline-major-mode-color-icon t
+      doom-modeline-height 40)
 (custom-set-faces
   '(mode-line ((t (:family "APL385 Unicode"))))
   '(mode-line-active ((t (:family "APL385 Unicode")))) ; For 29+
@@ -35,46 +36,8 @@
       :desc "Open notes file"
       "o n" #'open-notes)
 
-(set-ligatures! 'MAJOR-MODE
-    ;; Functional
-    :lambda        "lambda keyword"
-    :def           "function keyword"
-    :composition   "composition"
-    :map           "map/dictionary keyword"
-    ;; Types
-    :null          "null type"
-    :true          "true keyword"
-    :false         "false keyword"
-    :int           "int keyword"
-    :float         "float keyword"
-    :str           "string keyword"
-    :bool          "boolean keywork"
-    :list          "list keyword"
-    ;; Flow
-    :not           "not operator"
-    :in            "in operator"
-    :not-in        "not in operator"
-    :and           "and keyword"
-    :or            "or keyword"
-    :for           "for keyword"
-    :some          "some keyword"
-    :return        "return"
-    :yield         "yeild"
-    ;; Other
-    :union         "Union keyword"
-    :intersect     "Intersect keyword"
-    :diff          "diff keyword"
-    :tuple         "Tuple Keyword "
-    :pipe          "Pipe Keyword" ;; FIXME: find a non-private char
-    :dot           "Dot operator")
-
-(defun unprettify ()
-  (global-prettify-symbols-mode -1)
-)
-(add-hook 'buffer-list-update-hook 'unprettify)
-
-(setq org-directory "~/org/")
-(setq org-startup-folded t)
+(setq org-directory "~/org/"
+      org-startup-folded t)
 
 (custom-theme-set-faces
    'user
@@ -205,8 +168,8 @@
 (global-org-modern-mode)
 
 (add-hook 'js2-mode-hook
-          'prettier-js-mode
-          (lambda () (setq js2-basic-offset 2)))
+          'prettier-js-mode)
+(setq js2-basic-offset 4)
 
 (use-package all-the-icons)
 (use-package neotree
@@ -311,3 +274,14 @@
 
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
+
+;; (use-package eaf
+;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+;;   :custom
+;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser)
+;;   :config
+;;   (defalias 'browse-web #'eaf-open-browser)
+;;   (require 'eaf-browser))

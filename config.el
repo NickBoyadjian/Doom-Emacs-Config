@@ -56,48 +56,6 @@
 
 (after! org
   (setq org-ellipsis " ▾ ")
-  (appendq! +ligatures-extra-symbols
-            `(:checkbox      "☐"
-              :pending       "◼"
-              :checkedbox    "☑"
-              :list_property "∷"
-              :em_dash       "—"
-              :ellipses      "…"
-              :arrow_right   "→"
-              :arrow_left    "←"
-              :title        " "
-              :subtitle      "𝙩"
-              :author        "𝘼"
-              :date          "𝘿"
-              :property      ""
-              :options       "⌥"
-              :startup       "⏻"
-              :macro         "𝓜"
-              :html_head     "🅷"
-              :html          "🅗"
-              :latex_class   "🄻"
-              :latex_header  "🅻"
-              :beamer_header "🅑"
-              :latex         "🅛"
-              :attr_latex    "🄛"
-              :attr_html     "🄗"
-              :attr_org      "⒪"
-              :begin_quote   "❝"
-              :end_quote     "❞"
-              :caption       "☰"
-              :header        "›"
-              :results       "🠶"
-              :begin_export  "⏩"
-              :end_export    "⏪"
-              :properties    ""
-              :end           "∎"
-              :priority_a   ,(propertize "⚑" 'face 'all-the-icons-red)
-              :priority_b   ,(propertize "⬆" 'face 'all-the-icons-orange)
-              :priority_c   ,(propertize "■" 'face 'all-the-icons-yellow)
-              :priority_d   ,(propertize "⬇" 'face 'all-the-icons-green)
-              :priority_e   ,(propertize "❓" 'face 'all-the-icons-blue)
-              :roam_tags nil
-              :filetags nil))
   (set-ligatures! 'org-mode
     :merge t
     :checkbox      "[ ]"
@@ -140,9 +98,8 @@
     :priority_d    "[#D]"
     :priority_e    "[#E]"
     :roam_tags     "#+roam_tags:"
-    :filetags      "#+filetags:")
-  (plist-put +ligatures-extra-symbols :name "⁍")
-  )
+    :filetags      "#+filetags:"
+  ))
 
 (setq ;; Edit settings
  org-auto-align-tags nil

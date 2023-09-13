@@ -46,7 +46,7 @@
 
 (defun open-agenda-file()
   (interactive)
-    (display-buffer (find-file-noselect "~/.org/agenda.org")
+    (display-buffer (find-file-noselect "~/org/todo.org")
                     '(display-buffer-in-side-window . (( side . right ))))
     (other-window 1))
 

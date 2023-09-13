@@ -1,7 +1,7 @@
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
-      doom-font (font-spec :family "JetBrains Mono" :size 15)
-      doom-theme 'doom-vibrant
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
+      ;; doom-theme 'doom-ayu-mirage
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
@@ -10,13 +10,10 @@
 (setq doom-modeline-major-mode-icon t
       doom-modeline-major-mode-color-icon t
       doom-modeline-height 40)
-(custom-set-faces
-  '(mode-line ((t (:family "APL385 Unicode"))))
-  '(mode-line-active ((t (:family "APL385 Unicode")))) ; For 29+
-  '(mode-line-inactive ((t (:family "APL385 Unicode")))))
-;; (use-package autothemer
-;;   :ensure t)
-;; (load-theme 'catppuccin-mocha t)
+
+(use-package autothemer
+  :ensure t)
+(load-theme 'catppuccin-frappe t)
 ;; (after! doom-themes
   ;; (load-theme 'doom-nano-dark t))
 ;; (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -25,6 +22,17 @@
 ;;   :config
 ;;   (doom-nano-modeline-mode 1)
 ;;   (global-hide-mode-line-mode 1))
+
+(custom-set-faces
+  '(mode-line ((t (:family "FiraCode Nerd Font"))))
+  '(mode-line-active ((t (:family "FiraCode Nerd Font")))) ; For 29+
+  '(mode-line-inactive ((t (:family "FiraCode Nerd Font"))))
+  '(org-level-4 ((t (:height 0.8 :foreground "#ff665c"))))
+  '(org-level-3 ((t (:height 0.95 :foreground "#a991f1"))))
+  '(org-level-2 ((t (:height 1.1 :foreground "#C57BDB"))))
+  '(org-level-1 ((t (:height 1.35 :foreground "#51afef"))))
+  '(org-document-title ((t (:height 1.6 :underline nil))))
+)
 
 (defun open-notes ()
   (interactive)
@@ -36,16 +44,18 @@
       :desc "Open notes file"
       "o n" #'open-notes)
 
+(defun open-agenda-file()
+  (interactive)
+    (display-buffer (find-file-noselect "~/.org/agenda.org")
+                    '(display-buffer-in-side-window . (( side . right ))))
+    (other-window 1))
+
+(map! :leader
+      :desc "Open notes file"
+      "o N" #'open-agenda-file)
+
 (setq org-directory "~/org/"
       org-startup-folded t)
-
-(custom-theme-set-faces
-   'user
-   `(org-level-4 ((t (:height 0.8) (:foreground"yellow"))))
-   `(org-level-3 ((t (:height 0.95))))
-   `(org-level-2 ((t (:height 1.1))))
-   `(org-level-1 ((t (:height 1.35))))
-   `(org-document-title ((t (:height 1.6 :underline nil)))))
 
 (custom-theme-set-faces
  'user
@@ -152,7 +162,7 @@
 
 (after! centaur-tabs
   (centaur-tabs-group-by-projectile-project)
-  (centaur-tabs-mode -1)
+  (centaur-tabs-mode 0)
   (setq centaur-tabs-height 36
         centaur-tabs-style "wave"
         centaur-tabs-set-icons t
@@ -200,37 +210,46 @@
                     :height 140
                     :italic t)))
   :config
-  (global-blamer-mode 1))
+  (global-blamer-mode -1))
 
 (map! :leader
       :desc "New journal entry"
       "o ." #'ranger)
 
-(use-package moody
-  :ensure t
+(use-package! doom-nano-modeline
+  :init
+  (setq doom-nano-modeline-position 'bottom)
+
   :config
-  (setq x-underline-at-descent-line t)
+  ;; (doom-nano-modeline-mode 0)
+  ;; (global-hide-mode-line-mode 1)
+  (doom-nano-modeline-mode 1))
 
-  (setq-default mode-line-format
-                '(" "
-                  mode-line-front-space
-                  mode-line-client
-                  mode-line-frame-identification
-                  mode-line-buffer-identification " " mode-line-position
-                  (vc-mode vc-mode)
-                  (multiple-cursors-mode mc/mode-line)
-                  " " mode-line-modes
-                  mode-line-end-spaces))
+;; (use-package moody
+;;   :ensure t
+;;   :config
+;;   (setq x-underline-at-descent-line t)
 
-  (use-package minions
-    :ensure t
-    :config
-    (minions-mode +1))
+;;   (setq-default mode-line-format
+;;                 '(" "
+;;                   mode-line-front-space
+;;                   mode-line-client
+;;                   mode-line-frame-identification
+;;                   mode-line-buffer-identification " " mode-line-position
+;;                   (vc-mode vc-mode)
+;;                   (multiple-cursors-mode mc/mode-line)
+;;                   " " mode-line-modes
+;;                   mode-line-end-spaces))
 
-  (setq global-mode-string (remove 'display-time-string global-mode-string))
+;;   (use-package minions
+;;     :ensure t
+;;     :config
+;;     (minions-mode +1))
 
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
+;;   (setq global-mode-string (remove 'display-time-string global-mode-string))
+
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode))
 
 ;; (use-package eaf
 ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"

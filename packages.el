@@ -8,6 +8,7 @@
 (package! org-modern)
 (package! autothemer)
 (package! poke-line)
+(package! catppuccin-theme)
 (package! nyan-mode)
 (package! blamer)
 (package! ranger)

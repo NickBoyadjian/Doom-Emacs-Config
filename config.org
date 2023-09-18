@@ -1,47 +1,30 @@
 #+title: Doom emacs config
 #+author: Nick Boyadjian
 
-* Basic Config
+* Basic setup
 #+begin_src emacs-lisp
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
       doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
-      ;; doom-theme 'doom-ayu-mirage
+      doom-theme 'catppuccin-frappe
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
-
-;; Modeline
-(setq doom-modeline-major-mode-icon t
-      doom-modeline-major-mode-color-icon t
-      doom-modeline-height 40)
-
-(use-package autothemer
-  :ensure t)
-(load-theme 'catppuccin-frappe t)
-;; (after! doom-themes
-  ;; (load-theme 'doom-nano-dark t))
-;; (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-
-;; (use-package! doom-nano-modeline
-;;   :config
-;;   (doom-nano-modeline-mode 1)
-;;   (global-hide-mode-line-mode 1))
 #+end_src
-* Custom set faces
+** Custom set faces
 #+begin_src emacs-lisp
-(custom-set-faces
-  '(mode-line ((t (:family "FiraCode Nerd Font"))))
-  '(mode-line-active ((t (:family "FiraCode Nerd Font")))) ; For 29+
-  '(mode-line-inactive ((t (:family "FiraCode Nerd Font"))))
-  '(org-level-4 ((t (:height 0.8 :foreground "#ff665c"))))
-  '(org-level-3 ((t (:height 0.95 :foreground "#a991f1"))))
-  '(org-level-2 ((t (:height 1.1 :foreground "#C57BDB"))))
-  '(org-level-1 ((t (:height 1.35 :foreground "#51afef"))))
-  '(org-document-title ((t (:height 1.6 :underline nil))))
-)
+;; (custom-set-faces
+;;   '(mode-line ((t (:family "FiraCode Nerd Font"))))
+;;   '(mode-line-active ((t (:family "FiraCode Nerd Font")))) ; For 29+
+;;   '(mode-line-inactive ((t (:family "FiraCode Nerd Font"))))
+;;   '(org-level-4 ((t (:height 0.8 :foreground "#ff665c"))))
+;;   '(org-level-3 ((t (:height 0.95 :foreground "#a991f1"))))
+;;   '(org-level-2 ((t (:height 1.1 :foreground "#C57BDB"))))
+;;   '(org-level-1 ((t (:height 1.35 :foreground "#51afef"))))
+;;   '(org-document-title ((t (:height 1.6 :underline nil))))
+;; )
 #+end_src
-* My Functions
+* Global functions
 #+begin_src emacs-lisp
 (defun open-notes ()
   (interactive)
@@ -63,7 +46,6 @@
       :desc "Open notes file"
       "o N" #'open-agenda-file)
 #+end_src
-
 * Org Mode
 #+begin_src emacs-lisp
 (setq org-directory "~/org/"
@@ -152,48 +134,12 @@
  "⭠ now ─────────────────────────────────────────────────")
 (global-org-modern-mode)
 #+end_src
-* Javascript
+* Programming languages
+** Javascript
 #+begin_src emacs-lisp
 (add-hook 'js2-mode-hook
           'prettier-js-mode)
 (setq js2-basic-offset 4)
-#+end_src
-* Neotree
-#+begin_src emacs-lisp
-(use-package all-the-icons)
-(use-package neotree
-  :config
-  (setq neo-smart-open t
-        neo-window-width 30
-        neo-window-fixed-size nil
-        neo-window-position 'left
-        neo-theme (if (display-graphic-p) 'icons 'arrow)
-        projectile-switch-project-action 'neotree-projectile-action)
-  ;; truncate long file names in neotree
-  (add-hook 'neo-after-create-hook
-            #'(lambda (_)
-                (with-current-buffer (get-buffer neo-buffer-name)
-                  (setq truncate-lines t)
-                  (setq word-wrap nil)
-                  (setq neo-smart-open t)
-                  (setq neo-window-position 'left)
-                  (make-local-variable 'auto-hscroll-mode)
-                  (setq auto-hscroll-mode nil)))))
-(doom-themes-neotree-config)
-(setq doom-themes-neotree-file-icons t)
-#+end_src
-* Centaur tabs
-#+begin_src emacs-lisp
-(after! centaur-tabs
-  (centaur-tabs-group-by-projectile-project)
-  (centaur-tabs-mode 0)
-  (setq centaur-tabs-height 36
-        centaur-tabs-style "wave"
-        centaur-tabs-set-icons t
-        centaur-tabs-modified-marker "o"
-        centaur-tabs-close-button "×"
-        centaur-tabs-set-bar 'above
-        centaur-tabs-gray-out-icons 'buffer))
 #+end_src
 * LSP
 #+begin_src emacs-lisp
@@ -224,30 +170,35 @@
         lsp-ui-sideline-show-code-actions nil
         lsp-elixir-suggest-specs nil))
 #+end_src
-* Blamer
+* EAF
 #+begin_src emacs-lisp
-(use-package blamer
-  :bind (("s-i" . blamer-show-commit-info))
-  :defer 20
-  :custom
-  (blamer-idle-time 0.3)
-  (blamer-min-offset 70)
-  :custom-face
-  (blamer-face ((t :foreground "#7a88cf"
-                    :background nil
-                    :height 140
-                    :italic t)))
-  :config
-  (global-blamer-mode -1))
-#+end_src
-* Ranger
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "New journal entry"
-      "o ." #'ranger)
-#+end_src
+;; (use-package eaf
+;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+;;   :custom
+;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser)
+;;   :config
+;;   (defalias 'browse-web #'eaf-open-browser)
+;;   (require 'eaf-browser))
 
-* Modeline
+#+end_src
+* UI packages
+** Centaur tabs
+#+begin_src emacs-lisp
+(after! centaur-tabs
+  (centaur-tabs-group-by-projectile-project)
+  (centaur-tabs-mode 0)
+  (setq centaur-tabs-height 36
+        centaur-tabs-style "wave"
+        centaur-tabs-set-icons t
+        centaur-tabs-modified-marker "o"
+        centaur-tabs-close-button "×"
+        centaur-tabs-set-bar 'above
+        centaur-tabs-gray-out-icons 'buffer))
+#+end_src
+** Modeline
 #+begin_src emacs-lisp
 (use-package! doom-nano-modeline
   :init
@@ -284,17 +235,53 @@
 ;;   (moody-replace-mode-line-buffer-identification)
 ;;   (moody-replace-vc-mode))
 #+end_src
-* EAF
+** Ranger
 #+begin_src emacs-lisp
-;; (use-package eaf
-;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-;;   :custom
-;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-;;   (eaf-browser-continue-where-left-off t)
-;;   (eaf-browser-enable-adblocker t)
-;;   (browse-url-browser-function 'eaf-open-browser)
-;;   :config
-;;   (defalias 'browse-web #'eaf-open-browser)
-;;   (require 'eaf-browser))
-
+(map! :leader
+      :desc "New journal entry"
+      "o ." #'ranger)
+#+end_src
+** Blamer
+#+begin_src emacs-lisp
+(use-package blamer
+  :bind (("s-i" . blamer-show-commit-info))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    :height 140
+                    :italic t)))
+  :config
+  (global-blamer-mode -1))
+#+end_src
+** Neotree
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+(use-package neotree
+  :config
+  (setq neo-smart-open t
+        neo-window-width 30
+        neo-window-fixed-size nil
+        neo-window-position 'left
+        neo-theme (if (display-graphic-p) 'icons 'arrow)
+        projectile-switch-project-action 'neotree-projectile-action)
+  ;; truncate long file names in neotree
+  (add-hook 'neo-after-create-hook
+            #'(lambda (_)
+                (with-current-buffer (get-buffer neo-buffer-name)
+                  (setq truncate-lines t)
+                  (setq word-wrap nil)
+                  (setq neo-smart-open t)
+                  (setq neo-window-position 'left)
+                  (make-local-variable 'auto-hscroll-mode)
+                  (setq auto-hscroll-mode nil)))))
+(doom-themes-neotree-config)
+(setq doom-themes-neotree-file-icons t)
+#+end_src
+** Emojify
+#+begin_src emacs_lisp
+(global-emojify-mode)
 #+end_src

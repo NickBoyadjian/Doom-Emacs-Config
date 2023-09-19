@@ -37,18 +37,20 @@
       :desc "Open notes file"
       "o N" #'open-agenda-file)
 
-(setq org-directory "~/org/"
-      org-startup-folded t)
+(after! org
+  (setq
+   org-ellipsis "v"
+   org-directory "~/org/"
+   org-startup-folded t))
 
 (custom-theme-set-faces
  'user
- '(variable-pitch ((t (:family "JetBrains Mono" :size 15))))
- '(fixed-pitch ((t ( :family "JetBrains Mono" :height 160)))))
+ '(variable-pitch ((t (:family "FiraCode Nerd Font" :size 15))))
+ '(fixed-pitch ((t ( :family "FiraCode Nerd Font" :height 160)))))
 
  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
 (after! org
-  (setq org-ellipsis " ▾ ")
   (set-ligatures! 'org-mode
     :merge t
     :checkbox      "[ ]"
@@ -121,6 +123,15 @@
           'prettier-js-mode)
 (setq js2-basic-offset 4)
 
+(defun nick/enter-pipe ()
+  (interactive)
+  (let ((oldpos (point)))
+    (end-of-line)
+    (newline-and-indent)
+    (insert "|> ")))
+
+(evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe)
+
 (after! lsp-mode
   (setq lsp-idle-delay 1.0
         lsp-log-io nil
@@ -148,17 +159,6 @@
         lsp-ui-sideline-show-code-actions nil
         lsp-elixir-suggest-specs nil))
 
-;; (use-package eaf
-;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-;;   :custom
-;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-;;   (eaf-browser-continue-where-left-off t)
-;;   (eaf-browser-enable-adblocker t)
-;;   (browse-url-browser-function 'eaf-open-browser)
-;;   :config
-;;   (defalias 'browse-web #'eaf-open-browser)
-;;   (require 'eaf-browser))
-
 (after! centaur-tabs
   (centaur-tabs-group-by-projectile-project)
   (centaur-tabs-mode 0)
@@ -175,8 +175,6 @@
   (setq doom-nano-modeline-position 'bottom)
 
   :config
-  ;; (doom-nano-modeline-mode 0)
-  ;; (global-hide-mode-line-mode 1)
   (doom-nano-modeline-mode 1))
 
 ;; (use-package moody
@@ -206,7 +204,7 @@
 ;;   (moody-replace-vc-mode))
 
 (map! :leader
-      :desc "New journal entry"
+      :desc "Open ranger"
       "o ." #'ranger)
 
 (use-package blamer

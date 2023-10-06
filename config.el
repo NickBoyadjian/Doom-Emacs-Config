@@ -6,6 +6,13 @@
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
 
+(setq doom-theme 'catppuccin-frappe)
+;; (use-package kaolin-themes
+;;   :ensure t
+;;   :config
+;;   (load-theme 'kaolin-bubblegum t)
+;;   (kaolin-treemacs-theme))
+
 ;; (custom-set-faces
 ;;   '(mode-line ((t (:family "FiraCode Nerd Font"))))
 ;;   '(mode-line-active ((t (:family "FiraCode Nerd Font")))) ; For 29+
@@ -39,7 +46,7 @@
 
 (after! org
   (setq
-   org-ellipsis "v"
+   org-ellipsis " ↓ "
    org-directory "~/org/"
    org-startup-folded t))
 
@@ -221,26 +228,28 @@
   :config
   (global-blamer-mode -1))
 
-(use-package all-the-icons)
-(use-package neotree
-  :config
-  (setq neo-smart-open t
-        neo-window-width 30
-        neo-window-fixed-size nil
-        neo-window-position 'left
-        neo-theme (if (display-graphic-p) 'icons 'arrow)
-        projectile-switch-project-action 'neotree-projectile-action)
-  ;; truncate long file names in neotree
-  (add-hook 'neo-after-create-hook
-            #'(lambda (_)
-                (with-current-buffer (get-buffer neo-buffer-name)
-                  (setq truncate-lines t)
-                  (setq word-wrap nil)
-                  (setq neo-smart-open t)
-                  (setq neo-window-position 'left)
-                  (make-local-variable 'auto-hscroll-mode)
-                  (setq auto-hscroll-mode nil)))))
-(doom-themes-neotree-config)
-(setq doom-themes-neotree-file-icons t)
+;; (use-package all-the-icons)
+;; (use-package neotree
+;;   :config
+;;   (setq neo-smart-open t
+;;         neo-window-width 30
+;;         neo-window-fixed-size nil
+;;         neo-window-position 'left
+;;         neo-theme (if (display-graphic-p) 'icons 'arrow)
+;;         projectile-switch-project-action 'neotree-projectile-action)
+;;   ;; truncate long file names in neotree
+;;   (add-hook 'neo-after-create-hook
+;;             #'(lambda (_)
+;;                 (with-current-buffer (get-buffer neo-buffer-name)
+;;                   (setq truncate-lines t)
+;;                   (setq word-wrap nil)
+;;                   (setq neo-smart-open t)
+;;                   (setq neo-window-position 'left)
+;;                   (make-local-variable 'auto-hscroll-mode)
+;;                   (setq auto-hscroll-mode nil)))))
+;; (doom-themes-neotree-config)
+;; (setq doom-themes-neotree-file-icons t)
 
 (global-emojify-mode)
+
+(treemacs-load-theme "all-the-icons")

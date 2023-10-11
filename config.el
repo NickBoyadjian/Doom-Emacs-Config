@@ -1,17 +1,11 @@
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
       doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
-      doom-theme 'catppuccin-frappe
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
 
-(setq doom-theme 'catppuccin-frappe)
-;; (use-package kaolin-themes
-;;   :ensure t
-;;   :config
-;;   (load-theme 'kaolin-bubblegum t)
-;;   (kaolin-treemacs-theme))
+(setq doom-theme 'doom-challenger-deep)
 
 ;; (custom-set-faces
 ;;   '(mode-line ((t (:family "FiraCode Nerd Font"))))
@@ -24,7 +18,7 @@
 ;;   '(org-document-title ((t (:height 1.6 :underline nil))))
 ;; )
 
-(defun open-notes ()
+(defun nick/open-notes ()
   (interactive)
     (display-buffer (find-file-noselect "~/.org/notes.org")
                     '(display-buffer-in-side-window . (( side . right ))))
@@ -32,9 +26,9 @@
 
 (map! :leader
       :desc "Open notes file"
-      "o n" #'open-notes)
+      "o n" #'nick/open-notes)
 
-(defun open-agenda-file()
+(defun nick/open-agenda-file()
   (interactive)
     (display-buffer (find-file-noselect "~/org/todo.org")
                     '(display-buffer-in-side-window . (( side . right ))))
@@ -42,7 +36,7 @@
 
 (map! :leader
       :desc "Open notes file"
-      "o N" #'open-agenda-file)
+      "o N" #'nick/open-agenda-file)
 
 (after! org
   (setq
@@ -137,7 +131,8 @@
     (newline-and-indent)
     (insert "|> ")))
 
-(evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe)
+(after! elixir-mode
+  (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
 
 (after! lsp-mode
   (setq lsp-idle-delay 1.0
@@ -250,6 +245,6 @@
 ;; (doom-themes-neotree-config)
 ;; (setq doom-themes-neotree-file-icons t)
 
-(global-emojify-mode)
-
-(treemacs-load-theme "all-the-icons")
+(after! treemacs
+  (treemacs-load-theme "all-the-icons")
+  (treemacs-follow-mode))

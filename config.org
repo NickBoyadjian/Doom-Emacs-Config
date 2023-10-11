@@ -8,20 +8,13 @@ Here we set up basic values like name, email, font, etc...
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
       doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
-      doom-theme 'catppuccin-frappe
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
 #+end_src
 ** Color theme
 #+begin_src emacs-lisp
-(setq doom-theme 'catppuccin-frappe)
-;; (use-package kaolin-themes
-;;   :ensure t
-;;   :config
-;;   (load-theme 'kaolin-bubblegum t)
-;;   (kaolin-treemacs-theme))
-
+(setq doom-theme 'doom-challenger-deep)
 #+end_src
 
 ** Custom set faces
@@ -41,7 +34,7 @@ Here we set up basic values like name, email, font, etc...
 **  Open notes
 Open notes file in a side window
 #+begin_src emacs-lisp
-(defun open-notes ()
+(defun nick/open-notes ()
   (interactive)
     (display-buffer (find-file-noselect "~/.org/notes.org")
                     '(display-buffer-in-side-window . (( side . right ))))
@@ -49,12 +42,12 @@ Open notes file in a side window
 
 (map! :leader
       :desc "Open notes file"
-      "o n" #'open-notes)
+      "o n" #'nick/open-notes)
 #+end_src
 **  Open agenda
 Open agenda in a side window
 #+begin_src emacs-lisp
-(defun open-agenda-file()
+(defun nick/open-agenda-file()
   (interactive)
     (display-buffer (find-file-noselect "~/org/todo.org")
                     '(display-buffer-in-side-window . (( side . right ))))
@@ -62,7 +55,7 @@ Open agenda in a side window
 
 (map! :leader
       :desc "Open notes file"
-      "o N" #'open-agenda-file)
+      "o N" #'nick/open-agenda-file)
 #+end_src
 * Org Mode
 #+begin_src emacs-lisp
@@ -172,7 +165,9 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
     (newline-and-indent)
     (insert "|> ")))
 
-(evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe)
+(after! elixir-mode
+  (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
+
 #+end_src
 * LSP
 #+begin_src emacs-lisp
@@ -298,11 +293,9 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
 ;; (doom-themes-neotree-config)
 ;; (setq doom-themes-neotree-file-icons t)
 #+end_src
-** Emojify
-#+begin_src emacs_lisp
-(global-emojify-mode)
-#+end_src
 ** Treemacs
 #+begin_src emacs_lisp
-(treemacs-load-theme "all-the-icons")
+(after! treemacs
+  (treemacs-load-theme "all-the-icons")
+  (treemacs-follow-mode))
 #+end_src

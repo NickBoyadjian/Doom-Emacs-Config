@@ -7,16 +7,8 @@
 
 (setq doom-theme 'doom-challenger-deep)
 
-;; (custom-set-faces
-;;   '(mode-line ((t (:family "FiraCode Nerd Font"))))
-;;   '(mode-line-active ((t (:family "FiraCode Nerd Font")))) ; For 29+
-;;   '(mode-line-inactive ((t (:family "FiraCode Nerd Font"))))
-;;   '(org-level-4 ((t (:height 0.8 :foreground "#ff665c"))))
-;;   '(org-level-3 ((t (:height 0.95 :foreground "#a991f1"))))
-;;   '(org-level-2 ((t (:height 1.1 :foreground "#C57BDB"))))
-;;   '(org-level-1 ((t (:height 1.35 :foreground "#51afef"))))
-;;   '(org-document-title ((t (:height 1.6 :underline nil))))
-;; )
+(custom-set-faces
+  '(org-document-title ((t (:height 1.6 :underline nil)))))
 
 (defun nick/open-notes ()
   (interactive)
@@ -124,15 +116,15 @@
           'prettier-js-mode)
 (setq js2-basic-offset 4)
 
-(defun nick/enter-pipe ()
-  (interactive)
-  (let ((oldpos (point)))
-    (end-of-line)
-    (newline-and-indent)
-    (insert "|> ")))
+;; (defun nick/enter-pipe ()
+;;   (interactive)
+;;   (let ((oldpos (point)))
+;;     (end-of-line)
+;;     (newline-and-indent)
+;;     (insert "|> ")))
 
-(after! elixir-mode
-  (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
+;; (add-hook 'elixir-mode-hook
+;;   (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
 
 (after! lsp-mode
   (setq lsp-idle-delay 1.0
@@ -161,49 +153,12 @@
         lsp-ui-sideline-show-code-actions nil
         lsp-elixir-suggest-specs nil))
 
-(after! centaur-tabs
-  (centaur-tabs-group-by-projectile-project)
-  (centaur-tabs-mode 0)
-  (setq centaur-tabs-height 36
-        centaur-tabs-style "wave"
-        centaur-tabs-set-icons t
-        centaur-tabs-modified-marker "o"
-        centaur-tabs-close-button "×"
-        centaur-tabs-set-bar 'above
-        centaur-tabs-gray-out-icons 'buffer))
-
 (use-package! doom-nano-modeline
   :init
   (setq doom-nano-modeline-position 'bottom)
 
   :config
   (doom-nano-modeline-mode 1))
-
-;; (use-package moody
-;;   :ensure t
-;;   :config
-;;   (setq x-underline-at-descent-line t)
-
-;;   (setq-default mode-line-format
-;;                 '(" "
-;;                   mode-line-front-space
-;;                   mode-line-client
-;;                   mode-line-frame-identification
-;;                   mode-line-buffer-identification " " mode-line-position
-;;                   (vc-mode vc-mode)
-;;                   (multiple-cursors-mode mc/mode-line)
-;;                   " " mode-line-modes
-;;                   mode-line-end-spaces))
-
-;;   (use-package minions
-;;     :ensure t
-;;     :config
-;;     (minions-mode +1))
-
-;;   (setq global-mode-string (remove 'display-time-string global-mode-string))
-
-;;   (moody-replace-mode-line-buffer-identification)
-;;   (moody-replace-vc-mode))
 
 (map! :leader
       :desc "Open ranger"
@@ -223,28 +178,9 @@
   :config
   (global-blamer-mode -1))
 
-;; (use-package all-the-icons)
-;; (use-package neotree
-;;   :config
-;;   (setq neo-smart-open t
-;;         neo-window-width 30
-;;         neo-window-fixed-size nil
-;;         neo-window-position 'left
-;;         neo-theme (if (display-graphic-p) 'icons 'arrow)
-;;         projectile-switch-project-action 'neotree-projectile-action)
-;;   ;; truncate long file names in neotree
-;;   (add-hook 'neo-after-create-hook
-;;             #'(lambda (_)
-;;                 (with-current-buffer (get-buffer neo-buffer-name)
-;;                   (setq truncate-lines t)
-;;                   (setq word-wrap nil)
-;;                   (setq neo-smart-open t)
-;;                   (setq neo-window-position 'left)
-;;                   (make-local-variable 'auto-hscroll-mode)
-;;                   (setq auto-hscroll-mode nil)))))
-;; (doom-themes-neotree-config)
-;; (setq doom-themes-neotree-file-icons t)
-
-(after! treemacs
-  (treemacs-load-theme "all-the-icons")
-  (treemacs-follow-mode))
+(use-package! treemacs-all-the-icons
+  :config
+  (treemacs-load-theme 'all-the-icons)
+  (setq doom-themes-treemacs-theme 'all-the-icons)
+  (treemacs-follow-mode)
+  (map! :desc "Select Treemacs window" "<f8>" #'treemacs-select-window))

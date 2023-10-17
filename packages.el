@@ -6,15 +6,10 @@
 (package! org-bullets)
 (package! jest-test-mode)
 (package! org-modern)
-(package! autothemer)
-(package! poke-line)
 (package! catppuccin-theme)
-(package! nyan-mode)
+(package! treemacs-all-the-icons)
 (package! blamer)
 (package! ranger)
-(package! moody)
-(package! minions)
-(package! ef-themes)
 (package! doom-nano-modeline
   :recipe (:host github
   :repo "ronisbr/doom-nano-modeline"))

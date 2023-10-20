@@ -12,7 +12,7 @@
 
 (defun nick/open-notes ()
   (interactive)
-    (display-buffer (find-file-noselect "~/.org/notes.org")
+    (display-buffer (find-file-noselect "~/org/notes.org")
                     '(display-buffer-in-side-window . (( side . right ))))
     (other-window 1))
 
@@ -116,15 +116,15 @@
           'prettier-js-mode)
 (setq js2-basic-offset 4)
 
-;; (defun nick/enter-pipe ()
-;;   (interactive)
-;;   (let ((oldpos (point)))
-;;     (end-of-line)
-;;     (newline-and-indent)
-;;     (insert "|> ")))
+(defun nick/enter-pipe ()
+  (interactive)
+  (let ((oldpos (point)))
+    (end-of-line)
+    (newline-and-indent)
+    (insert "|> ")))
 
-;; (add-hook 'elixir-mode-hook
-;;   (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
+(add-hook 'elixir-mode-hook
+  (evil-define-key 'insert 'elixir-mode-map (kbd "<C-return>") 'nick/enter-pipe))
 
 (after! lsp-mode
   (setq lsp-idle-delay 1.0
@@ -180,7 +180,7 @@
 
 (use-package! treemacs-all-the-icons
   :config
-  (treemacs-load-theme 'all-the-icons)
-  (setq doom-themes-treemacs-theme 'all-the-icons)
+  (treemacs-load-theme 'nerd-icons)
+  (setq doom-themes-treemacs-theme 'nerd-icons)
   (treemacs-follow-mode)
   (map! :desc "Select Treemacs window" "<f8>" #'treemacs-select-window))

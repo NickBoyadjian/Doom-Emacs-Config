@@ -49,6 +49,14 @@ Open agenda in a side window
       :desc "Open notes file"
       "o N" #'nick/open-agenda-file)
 #+end_src
+
+**  Toggle Apheleia mode
+Toggles Apheleia mode to turn on/off formatting in the current buffer
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Apheleia mode"
+      "t a" 'apheleia-mode)
+#+end_src
 * Org Mode
 #+begin_src emacs-lisp
 (after! org

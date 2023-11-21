@@ -30,6 +30,10 @@
       :desc "Open notes file"
       "o N" #'nick/open-agenda-file)
 
+(map! :leader
+      :desc "Apheleia mode"
+      "t a" 'apheleia-mode)
+
 (after! org
   (setq
    org-ellipsis " ↓ "

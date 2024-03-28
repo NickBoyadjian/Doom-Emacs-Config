@@ -1,7 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 (package! eslint-rc)
-;; (package! format-all)
 (package! prettier-rc)
 (package! evil-matchit)
 (package! org-bullets)
@@ -10,6 +9,7 @@
 (package! catppuccin-theme)
 (package! treemacs-all-the-icons)
 (package! blamer)
+(package! inf-elixir)
 (package! ranger)
 (package! doom-nano-modeline
   :recipe (:host github
@@ -22,11 +22,16 @@
 
 (package! prettier)
 (package! alchemist)
+(package! verb)
+(package! tree-sitter)
+(package! tree-sitter-langs)
+(package! tree-indent)
 
-(package! apheleia
-  :recipe (:host github
-           :repo "radian-software/apheleia"
-           :branch "rr-mix"))
+;; (package! apheleia
+;;   :recipe (:host github
+;;            :repo "radian-software/apheleia"
+;;            :branch "rr-mix"))
+;;
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.

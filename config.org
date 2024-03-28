@@ -7,14 +7,14 @@ Here we set up basic values like name, email, font, etc...
 #+begin_src emacs-lisp
 (setq user-full-name "Nick Boyadjian"
       user-mail-address "nick.boyadjian@podium.com"
-      doom-font (font-spec :family "FiraCode Nerd Font" :size 15)
+      doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15)
       display-line-numbers-type 'relative
       projectile-project-search-path '("~/projects/podium")
       fancy-splash-image "~/Pictures/luffy.png")
 #+end_src
 ** Color theme
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-challenger-deep)
+(setq doom-theme 'doom-dracula)
 #+end_src
 
 ** Custom set faces
@@ -56,6 +56,13 @@ Toggles Apheleia mode to turn on/off formatting in the current buffer
 (map! :leader
       :desc "Apheleia mode"
       "t a" 'apheleia-mode)
+#+end_src
+**  Search project with vertico
+Toggles Apheleia mode to turn on/off formatting in the current buffer
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Search project with Veritco"
+      "s P" '+vertico/project-search)
 #+end_src
 * Org Mode
 #+begin_src emacs-lisp
@@ -149,19 +156,49 @@ Toggles Apheleia mode to turn on/off formatting in the current buffer
 #+end_src
 * Programming languages
 ** Javascript
+*** Start prettier
 #+begin_src emacs-lisp
 (add-hook 'js2-mode-hook
           'prettier-js-mode)
 (setq js2-basic-offset 4)
 #+end_src
+*** Run tests
+#+begin_src emacs-lisp
+(map! :after js2-mode
+        :localleader
+        :map js2-mode-map
+        :prefix ("t" . "test")
+        "v" #'jest-test-run
+        "s" #'jest-test-run-at-point)
+#+end_src
 ** Elixir
 *** Lsp + alchemy
 #+begin_src emacs-lisp
+;; Always start lsp in elixir files
 (add-hook 'elixir-mode-hook #'lsp)
+
+(after! lsp-mode
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("~/build/lexical/_build/dev/package/lexical/bin/start_lexical.sh"))
+                    :multi-root t
+                    :activation-fn (lsp-activate-on "elixir")
+                    :server-id 'lexical-ls)))
+
 (use-package alchemist
   :diminish (alchemist-mode alchemist-phoenix-mode)
   :hook ((elixir-mode . alchemist-mode)
          (elixir-mode . alchemist-phoenix-mode)))
+#+end_src
+*** Org babel
+#+begin_src emacs-lisp
+;; git clone https://github.com/victorolinasc/ob-elixir.git
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'ob-elixir)
+
+;; example of adding languages to babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((elixir . t)))
 #+end_src
 *** Enter pipe binding
 When in elixir-mode, press <C-return> to create a new line with a pipe
@@ -179,6 +216,32 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
                         (kbd "<C-return>") 'nick/enter-pipe)))
 
 #+end_src
+*** Repl (inf-elixir)
+#+begin_src emacs-lisp
+;; (use-package! inf-elixir
+  ;; :config
+(defun inf-elixir-phx-server ()
+  (interactive)
+    (inf-elixir-project "iex -S mix phx.server"))
+
+ (map! :after elixir-mode
+        :localleader
+        :map elixir-mode-map
+        :prefix ("i" . "repl")
+        "i" 'inf-elixir
+        "p" 'inf-elixir-phx-server
+        ;; "p" 'inf-elixir-project
+        "l" 'inf-elixir-send-line
+        "r" 'inf-elixir-send-region
+        "b" 'inf-elixir-send-buffer
+        "R" 'inf-elixir-reload-module)
+#+end_src
+** Gleam
+#+begin_src emacs-lisp
+(use-package gleam-mode
+  :load-path "~/.emacs.d/lisp/gleam-mode")
+#+end_src
+
 * LSP
 #+begin_src emacs-lisp
 (after! lsp-mode
@@ -248,6 +311,17 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
   (setq doom-themes-treemacs-theme 'nerd-icons)
   (map! :desc "Select Treemacs window" "<f8>" #'treemacs-select-window)
 
+  ;; Open current file in treemacs
+  (defun nick/open-file-in-treemacs ()
+    (interactive)
+    (treemacs-find-file)
+    (treemacs-select-window))
+
+
+  (map! :leader
+        :desc "Find file in treemacs"
+        "o P" #'nick/open-file-in-treemacs)
+
   (treemacs-follow-mode)
   (treemacs-toggle-fixed-width))
 #+end_src
@@ -264,24 +338,56 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
 
 * Workspaces
 #+begin_src emacs-lisp
+(custom-set-faces!
+  '(+workspace-tab-face :inherit default :family "Jost" :height 135)
+  '(+workspace-tab-selected-face :inherit (highlight +workspace-tab-face)))
+
 (after! persp-mode
-  ;; alternative, non-fancy version which only centers the output of +workspace--tabline
   (defun workspaces-formatted ()
-    (+doom-dashboard--center (frame-width) (+workspace--tabline)))
-
-  (defun hy/invisible-current-workspace ()
-    "The tab bar doesn't update when only faces change (i.e. the
-current workspace), so we invisibly print the current workspace
-name as well to trigger updates"
-    (propertize (safe-persp-name (get-current-persp)) 'invisible t))
-
-  (customize-set-variable 'tab-bar-format '(workspaces-formatted tab-bar-format-align-right hy/invisible-current-workspace))
-
-  ;; don't show current workspaces when we switch, since we always see them
-  (advice-add #'+workspace/display :override #'ignore)
-  ;; same for renaming and deleting (and saving, but oh well)
-  (advice-add #'+workspace-message :override #'ignore))
-
+    (+doom-dashboard--center (frame-width)
+                             (let ((names (or persp-names-cache nil))
+                                   (current-name (safe-persp-name (get-current-persp))))
+                               (mapconcat
+                                #'identity
+                                (cl-loop for name in names
+                                         for i to (length names)
+                                         collect
+                                         (concat (propertize (format " %d" (1+ i)) 'face
+                                                             `(:inherit ,(if (equal current-name name)
+                                                                             '+workspace-tab-selected-face
+                                                                           '+workspace-tab-face)
+                                                               :weight bold))
+                                                 (propertize (format " %s " name) 'face
+                                                             (if (equal current-name name)
+                                                                 '+workspace-tab-selected-face
+                                                               '+workspace-tab-face))))
+                                " "))))
+)
 ;; need to run this later for it to not break frame size for some reason
 ;; (run-at-time nil nil (cmd! (tab-bar-mode +1)))
+#+end_src
+
+* Verb (http client)
+#+begin_src emacs-lisp
+(map! :after org
+      :localleader
+      :map org-mode-map
+      :prefix ("v" . "verb")
+      "s" #'verb-send-request-on-point)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((verb . t)))
+
+(defun verb-graphql (rs)
+  "Transform verb RS to GraphQL request."
+  (let* ((before-body (oref rs body))
+         (splited-body (split-string before-body "\n\n"))
+         (query (nth 0 splited-body))
+         (variables (nth 1 splited-body))
+         (json-object-type 'alist)
+         (parsed-variables (if variables (json-parse-string variables) '()))
+         (new-body (json-encode `((query . ,query) (variables . ,parsed-variables)))))
+    (oset rs body new-body)
+    rs))
 #+end_src

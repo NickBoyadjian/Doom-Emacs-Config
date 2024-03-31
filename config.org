@@ -154,6 +154,13 @@ Toggles Apheleia mode to turn on/off formatting in the current buffer
  "⭠ now ─────────────────────────────────────────────────")
 (global-org-modern-mode)
 #+end_src
+** Org babel
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t))
+ '((verb . t)))
+#+end_src
 * Programming languages
 ** Javascript
 *** Start prettier
@@ -374,10 +381,6 @@ When in elixir-mode, press <C-return> to create a new line with a pipe
       :map org-mode-map
       :prefix ("v" . "verb")
       "s" #'verb-send-request-on-point)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((verb . t)))
 
 (defun verb-graphql (rs)
   "Transform verb RS to GraphQL request."

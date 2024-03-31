@@ -26,6 +26,7 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! tree-indent)
+(package! csv-mode)
 
 ;; (package! apheleia
 ;;   :recipe (:host github
